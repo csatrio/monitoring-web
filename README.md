@@ -7,7 +7,7 @@
 $ git clone https://github.com/csatrio/monitoring-web.git monitoring-web
 
 # go into app's directory
-$ cd CoreUI-Vue
+$ cd monitoring-web
 
 # install app's dependencies
 $ npm install
