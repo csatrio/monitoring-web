@@ -58,6 +58,10 @@ const Register = () => import('@/views/pages/Register')
 const Users = () => import('@/views/users/Users')
 const User = () => import('@/views/users/User')
 
+// Devices
+const Devices = () => import('@/views/devices/Devices')
+const Device = () => import('@/views/devices/Device')
+
 Vue.use(Router)
 
 export default new Router({
@@ -122,6 +126,25 @@ export default new Router({
               meta: { label: 'User Details'},
               name: 'User',
               component: User,
+            },
+          ]
+        },
+        {
+          path: 'devices',
+          meta: { label: 'Devices'},
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Devices,
+            },
+            {
+              path: ':id',
+              meta: { label: 'Device Details'},
+              name: 'Device',
+              component: Device,
             },
           ]
         },

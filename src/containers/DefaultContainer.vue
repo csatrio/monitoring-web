@@ -10,6 +10,7 @@
       <b-navbar-nav class="d-md-down-none">
         <b-nav-item class="px-3" to="/dashboard">Dashboard</b-nav-item>
         <b-nav-item class="px-3" to="/users" exact>Users</b-nav-item>
+        <b-nav-item class="px-3" to="/devices" exact>Devices</b-nav-item>
         <b-nav-item class="px-3">Settings</b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
@@ -51,7 +52,7 @@
       <!--footer-->
       <div>
         <a href="https://coreui.io">CoreUI</a>
-        <span class="ml-1">&copy; 2018 creativeLabs.</span>
+        <span class="ml-1">&copy; 2018 Constantinus Satrio.</span>
       </div>
       <div class="ml-auto">
         <span class="mr-1">Powered by</span>
