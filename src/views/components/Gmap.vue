@@ -62,8 +62,9 @@ export default {
           color: 'black'
         },
         map: vm.map,
-        icon: vm.customIcon({fillColor: vm.markerColor(_device)})
+        icon: vm.customIcon({fillColor: vm.markerColor(_device.status)})
       })
+      marker.deviceid = _device.id
       var infowindow = new google.maps.InfoWindow({
         content: '<p>Device: ' + _device.name + '</p>' 
         + '<p>Vendor: ' + _device.vendor + '</p>'
@@ -127,8 +128,21 @@ export default {
         scale: 1,
       }, opts);
     },
-    markerColor (_device) {
-      return _device.status === 'Active' ? '#2ecc71' : '#FF0000' 
+    markerColor (status) {
+      return status === 'Active' ? '#2ecc71' : '#FF0000' 
+    },
+    changeMarker(deviceid, status){
+      var vm = this
+      console.log("Change Marker")
+      for(var i = 0; i < vm.markers.length; i++){
+        let m = vm.markers[i]
+        if(m.deviceid === deviceid){
+          m.setMap(null)
+          m.icon = vm.customIcon({fillColor: vm.markerColor(status)})
+          m.setMap(vm.map)
+          break
+        }
+      }
     }
   },
   mounted() {

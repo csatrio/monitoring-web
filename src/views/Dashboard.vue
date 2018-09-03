@@ -17,7 +17,7 @@
           </b-button-toolbar>
         </b-col>
       </b-row>
-      <Gmap></Gmap>
+      <Gmap ref="dashboard_map"></Gmap>
       <div slot="footer">
         <b-row class="text-center">
           <b-col class="mb-sm-2 mb-0">
@@ -113,6 +113,8 @@
 
 <script>
 const axios = require('axios')
+const WebSocket = require('isomorphic-ws');
+
 import CalloutChartExample from './dashboard/CalloutChartExample'
 import { Callout } from '@coreui/vue'
 import Gmap from './components/Gmap'
@@ -149,19 +151,50 @@ export default {
     },
     flag (value) {
       return 'flag-icon flag-icon-' + value
+    },
+    loadList(){
+      var vm = this
+      vm.device_list.length = 0
+      axios.get('api/device/')
+        .then(response=>{
+          response.data.data.forEach(e=>{
+            vm.device_list.push(e)
+          })
+        })
+        .catch(err=>{
+          vm.LogErr(err)
+        })
     }
   },
   mounted () {
     var vm = this
-    axios.get('api/device/')
-      .then(response=>{
-        response.data.data.forEach(e=>{
-          vm.device_list.push(e)
-        })
-      })
-      .catch(err=>{
-        vm.LogErr(err)
-      })
+    vm.loadList()
+    const ws = new WebSocket('ws://localhost:7000')
+    ws.onopen = function open() {
+      console.log('connected');
+    }
+    ws.onclose = function close() {
+      console.log('disconnected');
+    }
+    ws.onmessage = function incoming(msg) {
+      let data = JSON.parse(msg.data)
+      if(typeof data.deviceid !== 'undefined'){
+        console.log(msg.data)
+        let deviceid = Number(data.deviceid)
+        let status = data.status
+
+        // update device
+        for(var i=0; i<vm.device_list.length; i++){
+          let d = vm.device_list[i]
+          if(deviceid === d.id){
+            d.status = status
+          }
+        }
+        
+        // update map
+        vm.$refs.dashboard_map.changeMarker(deviceid, status)
+      }
+    }
   },
 }
 </script>
